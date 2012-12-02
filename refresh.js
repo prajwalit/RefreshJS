@@ -7,10 +7,10 @@
 
 var http = require ("http");
 var fs = require ("fs");
-var watchr = require ("watchr");
+var watchr = require ("./lib/watchr");
 var app = require ("connect") ();
 var qs = require ("querystring");
-var connection, currentWatcher;
+var connection, currentWatcher, settings;
 
 
 // Routes
@@ -54,6 +54,7 @@ app.use ("/settings/", function(request, response) {
     });
     request.on ("end", function () {
       fs.writeFile ("settings.json", qs.parse (body).settings);
+      settings = qs.parse (body).settings;
       updateWatcher ();
     });
   }
@@ -76,26 +77,49 @@ function updateWatcher () {
     console.log ("Starting watcher");
   }
 
-  watchr.watch ({
-    path: "/Users/prajwalit/playground/repos/refreshjs/resources/static/css",
-    listener: function(eventName, filePath) {
-      if (eventName === "change") {
-        console.log ("Update");
-        var fileType = filePath.split (".") [1];
-        var fileName = filePath.split ("/");
-        fileName = fileName [fileName.length - 1];
-        if (connection) {
-          sendFileUpdate ("update", fileName);
-        } else {
-          console.log ("Connection Lost.");
+  var paths = [];
+  if (settings.folders.css.length) {
+    paths.push (settings.folders.css [0].path);
+  }
+  if (settings.folders.images.length) {
+    paths.push (settings.folders.images [0].path);
+  }
+  if (settings.folders.js.length) {
+    paths.push (settings.folders.js [0].path);
+  }
+  if (settings.folders.html.length) {
+    paths.push (settings.folders.html [0].path);
+  }
+
+  if (paths.length) {
+    console.log ("Watching:\n" + paths.join (",\n"));
+    watchr.watch ({
+      ignoreHiddenFiles: true,
+      ignorePatterns: new RegExp (".+\/\.#.+"),
+      paths: paths,
+      listener: function(eventName, filePath) {
+        if (eventName === "change") {
+          var fileType = filePath.split (".") [1];
+          var fileName = filePath.split ("/");
+          fileName = fileName [fileName.length - 1];
+          var message = JSON.stringify ({
+            type: fileType,
+            name: fileName
+          });
+
+          if (connection) {
+            sendFileUpdate ("update", message);
+          } else {
+            console.log ("Connection Lost.");
+          }
         }
+      },
+      next: function(err, watcher) {
+        if (err)  throw err;
+        currentWatcher = watcher;
       }
-    },
-    next: function(err, watcher) {
-      if (err)  throw err;
-      currentWatcher = watcher;
-    }
-  });
+    });
+  }
 }
 
 
@@ -104,10 +128,12 @@ if (!fs.existsSync ("settings.json")) {
   fs.readFile ("defaultSettings.json", function (err, content) {
     fs.writeFile ("settings.json", content, function () {
       console.log ("Settings file updated");
+      settings = JSON.parse (fs.readFileSync ("settings.json"));
       updateWatcher ();
     });
   });
 } else {
+  settings = JSON.parse (fs.readFileSync ("settings.json"));
   updateWatcher ();
 }
 
