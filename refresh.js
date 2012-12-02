@@ -10,7 +10,7 @@ var fs = require ("fs");
 var watchr = require ("./lib/watchr");
 var app = require ("connect") ();
 var qs = require ("querystring");
-var connection, currentWatcher, settings;
+var connection, currentWatchers = [], settings;
 
 
 // Routes
@@ -41,7 +41,6 @@ app.use ("/background/", function(request, response) {
 // Settings XHR
 app.use ("/settings/", function(request, response) {
   if (request.method === "GET") {
-    console.log ("Sending Settings");
     response.setHeader ("Content-Type", "application/json");
     response.end (fs.readFileSync ("settings.json"));
   } else if (request.method === "POST") {
@@ -54,8 +53,9 @@ app.use ("/settings/", function(request, response) {
     });
     request.on ("end", function () {
       fs.writeFile ("settings.json", qs.parse (body).settings);
-      settings = qs.parse (body).settings;
+      settings = JSON.parse (qs.parse (body).settings);
       updateWatcher ();
+
     });
   }
 
@@ -70,11 +70,11 @@ app.use ("/", function(request, response) {
 // File Watcher
 function updateWatcher () {
 
-  if (currentWatcher) {
-    currentWatcher.close ();
-    console.log ("Restarting watcher");
-  } else {
-    console.log ("Starting watcher");
+  if (currentWatchers.length) {
+    for (var i=0;i<currentWatchers.length;i+=1) {
+      currentWatchers [i].close ();
+    }
+    currentWatchers = [];
   }
 
   var paths = [];
@@ -107,16 +107,12 @@ function updateWatcher () {
             name: fileName
           });
 
-          if (connection) {
-            sendFileUpdate ("update", message);
-          } else {
-            console.log ("Connection Lost.");
-          }
+          sendUpdate ("file-update", message);
         }
       },
-      next: function(err, watcher) {
+      next: function(err, watchers) {
         if (err)  throw err;
-        currentWatcher = watcher;
+        currentWatchers = watchers;
       }
     });
   }
@@ -138,7 +134,10 @@ if (!fs.existsSync ("settings.json")) {
 }
 
 // Send Server Side Event (EventSource)
-function sendFileUpdate (event, message) {
+function sendUpdate (event, message) {
+  if (!connection) {
+    return;
+  }
   var data = "";
   if (event) {
     data += "event: " + event + "\n";
@@ -153,3 +152,6 @@ function sendFileUpdate (event, message) {
 // Lets Go!
 app.listen (7725);
 console.log ("Cool! Now go to - http://localhost:7725");
+setTimeout (function () {
+  sendUpdate ("domains-update", JSON.stringify (settings.domains));
+}, 2500);
