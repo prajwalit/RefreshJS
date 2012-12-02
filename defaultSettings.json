@@ -1,12 +1,12 @@
 {
-  "folders": {
-    "css": [{
-      "path": "/Users/prajwalit/src/moby/resources/static/css",
+  "folders":{
+    "css":[{
+      "path":"/Users/prajwalit/playground/repos/refreshjs/resources/static/css",
       "active":true
     }],
     "images":[],
     "js":[],
-    "html": []
+    "html":[]
   },
   "domains":[{
     "name":"localhost:7725",
