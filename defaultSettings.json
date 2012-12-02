@@ -1,1 +1,17 @@
-{"path": "/Users/prajwalit/src/moby/resources/static/css"}
+{
+  "folders": {
+    "css": [{
+      "path": "/Users/prajwalit/src/moby/resources/static/css",
+      "active":true
+    }],
+    "images":[],
+    "js":[],
+    "html": []
+  },
+  "domains":[{
+    "name":"localhost:7725",
+    "active":true
+  }],
+  "backup":"",
+  "version":1
+}
