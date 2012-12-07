@@ -12,6 +12,7 @@
       switch (change.type) {
 
       case "css":
+        console.log ("CSS updated: " + change.name);
         var links = document.getElementsByTagName ("link");
         for (var i=0; i<links.length; i++) {
           var link = links [i];

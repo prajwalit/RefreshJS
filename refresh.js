@@ -98,10 +98,12 @@ function updateWatcher () {
       ignorePatterns: new RegExp (".+\/\.#.+"),
       paths: paths,
       listener: function(eventName, filePath) {
+
         if (eventName === "change") {
           var fileType = filePath.split (".") [1];
           var fileName = filePath.split ("/");
           fileName = fileName [fileName.length - 1];
+          console.log ("File changed: " + fileName);
           var message = JSON.stringify ({
             type: fileType,
             name: fileName
