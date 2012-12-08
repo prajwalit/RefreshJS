@@ -4,7 +4,7 @@ $body-bg         : #dddddd;
 $header-color    : #800000;
 $grey-border     : #aaaaaa;
 $box-shadow-color: #bbbbbb;
-$project-bg      : #eeeeee;
+$project-bg      : #fafafa;
 
 body {
     background: $body-bg;
@@ -21,7 +21,7 @@ header {
 
 h1 {
     margin: 0;
-    color: #fff;
+    color: white;
     font-size: 3em;
     font-weight: normal;
 }
@@ -285,4 +285,22 @@ footer {
         float: left;
         padding: 0 4px;
     }
+}
+
+
+.instructions-wrapper {
+    .inst-list {
+        //list-style-type: none;
+        font-size: 1.3em;
+        line-height: 2em;
+    }
+    .code {
+        border: 1px solid $grey-border;
+        background: $project-bg;
+        padding: 3px 6px;
+    }
+}
+
+.extension-enabled .instructions-wrapper {
+    display: none;
 }

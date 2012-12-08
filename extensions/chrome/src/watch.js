@@ -90,4 +90,9 @@
     }
   };
 
+
+  if (window.location.host === "localhost:7725") {
+    document.documentElement.setAttribute ("class", "extension-enabled");
+  }
+
 }) ();

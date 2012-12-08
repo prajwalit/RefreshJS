@@ -173,4 +173,10 @@
     };
   }
 
+  $ (document).ready (function () {
+    setTimeout (function () {
+      $ (".instructions-wrapper").attr ("style", "");
+    }, 1000);
+  });
+
 }) ();
