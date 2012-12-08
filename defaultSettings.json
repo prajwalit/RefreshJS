@@ -1,17 +1,13 @@
 {
-  "folders":{
-    "css":[{
-      "path":"/Users/prajwalit/playground/repos/refreshjs/resources/static/css",
-      "active":true
-    }],
-    "images":[],
-    "js":[],
-    "html":[]
-  },
-  "domains":[{
-    "name":"localhost:7725",
-    "active":true
+  "projects": [{
+    "active": true,
+    "name": "RefreshJS",
+    "css": "/Users/prajwalit/playground/refreshjs/resources/static/css",
+    "images": "/Users/prajwalit/playground/refreshjs/resources/static/images",
+    "js": "/Users/prajwalit/playground/refreshjs/resources/static/js",
+    "fonts": "/Users/prajwalit/playground/refreshjs/resources/static/fonts",
+    "domains": ["localhost:7725"]
   }],
-  "backup":"",
-  "version":1
+  "backup": "",
+  "version": 1
 }

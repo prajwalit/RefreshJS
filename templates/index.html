@@ -12,56 +12,97 @@
     </header>
 
     <div class="doc content-wrapper">
-      <h3>Welcome to RefreshJS!</h3>
-      <p>You need to do two things to get started -</p>
-      <ol>
-        <li>Enter path to your css folder of the repository to start watching.</li>
-        <li>Enter domain name of your site to enable auto-refresh on
-          that site. </li>
-      </ol>
+      <h3>Your projects</h3>
+      <div class="projects-wrapper">
 
-      <form id="settings-form" action="javascript:void(0);">
+
+        <div class="new-project-wrapper">
+          <button id="new-project">Create New Project</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-bg" class="hidden"></div>
+    <div id="modal" class="hidden">
+      <div class="modal-content">
+        <a class="modal-close" href="javascript:void(0);">Close</a>
+        <h3 id="modal-title">Create new project</h3>
+        <form id="project-form" action="javascript: void(0);">
+          <input id="project-index" type="hidden" />
+          <div class="proj-title">
+            <label>Project Title</label>
+            <input type="text" id="project-title" />
+          </div>
+          <div class="cols">
+          <div class="values col-1">
+            <label>Path to css folder</label>
+            <input type="text" id="css-folder" />
+            <label>Path to images folder</label>
+            <input type="text" id="images-folder" />
+            <label>Path to javascript folder</label>
+            <input type="text" id="js-folder" />
+            <label>Path to fonts folder</label>
+            <input type="text" id="fonts-folder" />
+          </div>
+
+          <div class="values col-2">
+            <label>Domain 1</label>
+            <input type="text" id="domain-1-inp" />
+            <label>Domain 2</label>
+            <input type="text" id="domain-2-inp" />
+          </div>
+          </div>
+          <div class="buttons-wrapper">
+            <a class="modal-close" href="javascript: void(0);">Cancel</a>
+            <button id="modal-submit">Create!</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="project-tmpl" style="display:none">
+      <div class="project" data_id="{{index}}">
+        <h4>{{name}}</h4>
         <div class="cols">
           <div class="col-1">
-            <h4>Start watching folders...</h4>
-            <div class="form-field">
-              <label>CSS Folder</label>
-              <input id="css-folder" type="text" />
-            </div>
-            <div class="form-field">
-              <label>Images Folder</label>
-              <input id="img-folder" type="text" />
-            </div>
-            <div class="form-field">
-              <label>JS Folder</label>
-              <input id="js-folder" type="text" />
-            </div>
-            <div class="form-field">
-              <label>HTML Folder</label>
-              <input id="html-folder" type="text" />
-            </div>
+            <ul class="values">
+              <li class="label">CSS Folder</li>
+              <li class="css" title="{{css}}">{{css}}</li>
+              <li class="label">Images Folder</li>
+              <li class="images" title="{{images}}">{{images}}</li>
+              <li class="label">JS Folder</li>
+              <li class="js" title="{{js}}">{{js}}</li>
+              <li class="label">Fonts Folder</li>
+              <li class="fonts" title="{{fonts}}">{{fonts}}</li>
+            </ul>
           </div>
           <div class="col-2">
-            <h4>Enter domain names</h4>
-            <div class="form-field">
-              <label>Domain 1</label>
-              <input id="domain-0" type="text" />
-            </div>
-            <div class="form-field">
-              <label>Domain 2</label>
-              <input id="domain-1" type="text" />
-            </div>
+            <ul class="domains">
+              <li class="label">Domain 1</li>
+              <li class="domain-1">{{domain-1}}</li>
+              <li class="label">Domain 2</li>
+              <li class="domain-2">{{domain-2}}</li>
+            </ul>
           </div>
         </div>
+        <div class="controls-wrapper">
+          <ul class="controls">
+            <li><a class="edit" href="javascript: void (0);">Edit</a></li>
+            <li><a class="delete" href="javascript: void (0);">Delete</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="delete-wrapper" style="display:none;">
+      <span class="pointer"></span>
+      <div class="delete-content">
+        Are you sure you want to delete this project?
         <div class="buttons-wrapper">
-          <div class="form-field submit-container">
-            <button>Save Settings</button>
-          </div>
+          <a class="delete-cancel" href="javascript: void(0);">Cancel</a>
+          <button id="delete-accept">Delete</button>
         </div>
-        <!-- <label>Watch path</label> -->
-        <!-- <input id="path-inp" value="" /> -->
-        <!-- <button type="submit">Update</button> -->
-      </form>
+      </div>
     </div>
 
     <footer>

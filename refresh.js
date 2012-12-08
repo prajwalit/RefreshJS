@@ -10,7 +10,7 @@ var fs = require ("fs");
 var watchr = require ("./lib/watchr");
 var app = require ("connect") ();
 var qs = require ("querystring");
-var connection, currentWatchers = [], settings;
+var connection, currentWatchers = [], settings, domains;
 
 
 // Routes
@@ -77,18 +77,22 @@ function updateWatcher () {
     currentWatchers = [];
   }
 
-  var paths = [];
-  if (settings.folders.css.length) {
-    paths.push (settings.folders.css [0].path);
-  }
-  if (settings.folders.images.length) {
-    paths.push (settings.folders.images [0].path);
-  }
-  if (settings.folders.js.length) {
-    paths.push (settings.folders.js [0].path);
-  }
-  if (settings.folders.html.length) {
-    paths.push (settings.folders.html [0].path);
+  var paths = [], projs = settings.projects;
+
+  for (var i=0; i<projs.length; i++) {
+    var p = projs [i];
+    if (p.css) {
+      paths.push (p.css);
+    }
+    if (p.images) {
+      paths.push (p.images);
+    }
+    if (p.js) {
+      paths.push (p.js);
+    }
+    if (p.fonts) {
+      paths.push (p.fonts);
+    }
   }
 
   if (paths.length) {
@@ -117,6 +121,11 @@ function updateWatcher () {
         currentWatchers = watchers;
       }
     });
+  }
+
+  domains = [];
+  for (var i = 0; i < settings.projects.length ; i++) {
+    domains = domains.concat (settings.projects [i].domains);
   }
 }
 
@@ -151,9 +160,11 @@ function sendUpdate (event, message) {
   connection.write (data);
 }
 
+// After server starts, tell all content-scripts which domains to watch.
+setTimeout (function () {
+  sendUpdate ("domains-update", JSON.stringify (domains));
+}, 2500);
+
 // Lets Go!
 app.listen (7725);
 console.log ("Cool! Now go to - http://localhost:7725");
-setTimeout (function () {
-  sendUpdate ("domains-update", JSON.stringify (settings.domains));
-}, 2500);

@@ -23,31 +23,19 @@ h1 {
 h3 {
   font-weight: normal;
   font-size: 2em;
-  margin-bottom: 0.5em; }
+  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid #aaaaaa; }
 
 h4 {
   font-weight: normal;
-  font-size: 1.1em;
-  border-bottom: 1px solid #888888;
-  padding-bottom: 4px;
-  width: 94%; }
+  font-size: 1.3em;
+  text-align: center;
+  margin: 0.5em 0 0; }
 
 .doc {
   padding: 10px 0;
   margin-bottom: 100px; }
-
-.cols {
-  overflow: auto;
-  width: 100%;
-  padding: 10px 0; }
-
-.col-1 {
-  width: 49%;
-  float: left; }
-
-.col-2 {
-  width: 49%;
-  float: right; }
 
 label {
   margin-top: 10px;
@@ -55,22 +43,160 @@ label {
   padding: 5px 0; }
 
 input {
-  width: 90%;
+  width: 96%;
   height: 40px;
   font-size: 16px;
   padding: 0 10px; }
 
-.buttons-wrapper .submit-container {
-  padding: 20px 10px 10px;
-  overflow: auto;
-  width: 95%;
-  margin: auto; }
-.buttons-wrapper button {
-  float: right;
+a {
+  color: maroon;
+  text-decoration: none; }
+  a:hover {
+    color: red; }
+
+.projects-wrapper .project {
   padding: 10px;
-  background: maroon;
-  color: #dddddd;
-  border: 0;
-  font-size: 16px;
-  font-weight: bold;
-  box-shadow: 2px 2px 4px #888888; }
+  background: #eeeeee;
+  margin-bottom: 15px;
+  border: 1px solid #aaaaaa;
+  box-shadow: 1px 1px 8px #aaaaaa;
+  overflow: auto; }
+  .projects-wrapper .project .cols {
+    overflow: auto; }
+  .projects-wrapper .project .col-1 {
+    float: left;
+    width: 60%;
+    white-space: nowrap;
+    overflow: hidden; }
+  .projects-wrapper .project .col-2 {
+    float: right;
+    width: 40%; }
+  .projects-wrapper .project .values, .projects-wrapper .project .domains {
+    list-style-type: none;
+    padding-left: 0; }
+    .projects-wrapper .project .values li, .projects-wrapper .project .domains li {
+      font-weight: bold;
+      padding-bottom: 8px; }
+    .projects-wrapper .project .values .label, .projects-wrapper .project .domains .label {
+      float: left;
+      margin-right: 20px;
+      font-weight: normal;
+      text-align: right; }
+  .projects-wrapper .project .values {
+    padding-left: 10px; }
+    .projects-wrapper .project .values .label {
+      width: 110px; }
+  .projects-wrapper .project .domains .label {
+    width: 85px; }
+  .projects-wrapper .project .controls-wrapper {
+    width: 100%;
+    overflow: auto; }
+  .projects-wrapper .project .controls {
+    float: right;
+    list-style-type: none;
+    margin: 0;
+    padding: 0 5px 3px 0; }
+    .projects-wrapper .project .controls li {
+      padding: 0 8px;
+      float: left; }
+.projects-wrapper .new-project-wrapper {
+  margin: 10px 0;
+  text-align: center; }
+  .projects-wrapper .new-project-wrapper #new-project {
+    cursor: pointer;
+    padding: 10px;
+    background: maroon;
+    color: #dddddd;
+    border: 0;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 1px 1px 8px #bbbbbb; }
+
+#modal-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: black;
+  opacity: 0.6; }
+
+#modal {
+  position: absolute;
+  background: white;
+  width: 1000px;
+  margin-left: -500px;
+  border: 1px solid;
+  left: 50%;
+  top: 150px; }
+  #modal .modal-content h3 {
+    margin: 0 0 5px;
+    padding: 10px 10px 10px 30px;
+    font-size: 1.6em;
+    border-bottom: 1px solid #aaaaaa;
+    background: maroon;
+    color: #dddddd; }
+  #modal .modal-content label {
+    font-size: 1.1em; }
+  #modal .modal-content form {
+    padding: 0 30px 10px; }
+  #modal .proj-title {
+    width: 40%;
+    margin: auto; }
+  #modal .cols {
+    overflow: auto; }
+  #modal .col-1 {
+    float: left;
+    width: 55%; }
+  #modal .col-2 {
+    padding-left: 20px;
+    float: left;
+    width: 42%; }
+  #modal .modal-close {
+    color: #dddddd;
+    float: right;
+    margin: 15px 30px 15px 15px; }
+  #modal .buttons-wrapper .modal-close {
+    float: none;
+    color: maroon;
+    margin: 0 15px; }
+
+.buttons-wrapper {
+  padding: 15px 0 5px;
+  text-align: right; }
+  .buttons-wrapper button {
+    cursor: pointer;
+    padding: 10px;
+    background: maroon;
+    color: #dddddd;
+    border: 0;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 2px 2px 4px #aaaaaa; }
+
+.delete-wrapper {
+  position: absolute;
+  width: 250px; }
+  .delete-wrapper .pointer {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #aaaaaa;
+    position: relative;
+    top: -10px;
+    float: right;
+    right: 10px; }
+  .delete-wrapper .delete-content {
+    padding: 10px;
+    border: 4px solid #aaaaaa;
+    background: white;
+    box-shadow: 2px 2px 4px #bbbbbb; }
+  .delete-wrapper .delete-cancel {
+    margin: 0 10px; }
+  .delete-wrapper #delete-accept {
+    padding: 7px 10px;
+    box-shadow: 2px 2px 4px #bbbbbb; }
+
+.hidden {
+  display: none; }

@@ -1,90 +1,176 @@
 (function () {
 
   $.getJSON ("/settings/", function (data) {
-    console.log (data);
-    if (data.folders.css [0]) {
-      $ ("#css-folder").val (data.folders.css [0].path);
-    }
-    if (data.folders.images [0]) {
-      $ ("#img-folder").val (data.folders.images [0].path);
-    }
-    if (data.folders.js [0]) {
-      $ ("#js-folder").val (data.folders.js [0].path);
-    }
-    if (data.folders.html [0]) {
-      $ ("#html-folder").val (data.folders.html [0].path);
-    }
-
-    if (data.domains [0]) {
-      $ ("#domain-0").val (data.domains [0].name);
-    }
-    if (data.domains [1]) {
-      $ ("#domain-1").val (data.domains [1].name);
+    for (var i=0; i<data.projects.length; i++) {
+      var p = data.projects [i];
+      var nodeTmpl = getProjectTmpl (p, i);
+      $ (".new-project-wrapper").before (nodeTmpl);
     }
   });
 
-  $ ("#settings-form").submit (function (event) {
-    $.post ("/settings/", {
-      settings: JSON.stringify (buildSettingsJSON ())
-    }, function () {
-      console.log ("Done Posting");
+  $ (".projects-wrapper").delegate (".edit", "click", function (event) {
+    var wrapper = $ (event.currentTarget).closest (".project");
+    var domains = [];
+    if (wrapper.find (".domain-1").text () !== "-") {
+      domains.push (wrapper.find (".domain-1").text ());
+    }
+    if (wrapper.find (".domain-2").text () !== "-") {
+      domains.push (wrapper.find (".domain-2").text ());
+    }
+    var data = {
+      id     : wrapper.attr ("data_id"),
+      name   : wrapper.find ("h4").text (),
+      css    : wrapper.find (".css").text () !== "-" ? wrapper.find (".css").text () : "",
+      images : wrapper.find (".images").text () !== "-" ? wrapper.find (".images").text () : "",
+      js     : wrapper.find (".js").text () !== "-" ? wrapper.find (".js").text () : "",
+      fonts  : wrapper.find (".fonts").text () !== "-" ? wrapper.find (".fonts").text () : "",
+      domains: domains
+    }
+    //console.log (data);
+    openModal (data);
+  });
+
+  $ (".projects-wrapper").delegate (".delete", "click", function (event) {
+    var et = $ (event.target);
+    var top = et.position ().top;
+    var left = et.position ().left;
+    $ (".delete-wrapper").show ().css ({
+      top: (top + 27) + "px",
+      left: (left - 202) + "px"
+    }).attr ("project_id", et.closest (".project").attr ("data_id"));
+  });
+
+  $ ("body").click (function (event) {
+    var et = $ (event.target);
+    if ((!et.hasClass ("delete") && !et.closest (".delete-wrapper").length) || et.hasClass ("delete-cancel")) {
+      $ (".delete-wrapper").hide ();
+    }
+  });
+
+  $ ("#delete-accept").click (function () {
+    var toDelete = $ (".delete-wrapper").hide ().attr ("project_id")*1;
+    $ (".projects-wrapper .project").each (function (index, node) {
+      if (index === toDelete) {
+        $ (node).remove ();
+      } else if (index > toDelete) {
+        $ (node).attr ("data_id", (index - 1));
+      }
     });
+    updateSettingsJSON ();
+  });
+
+  $ ("#new-project").click (function (event) {
+    openModal ();
+  });
+
+  $ (".modal-close").click (function (event) {
+    $ ("#modal-bg, #modal").addClass ("hidden");
+  });
+
+  $ ("#project-form").submit (function (event) {
+
+    var projectData = getFormData ();
+    $ ("#modal-bg, #modal").addClass ("hidden");
+
+    var creatingNew = $ ("#project-index").val () === "-1";
+    if (creatingNew) {
+      var nextIndex = $ (".projects-wrapper .project").length;
+      $ (".new-project-wrapper").before (getProjectTmpl (projectData, nextIndex));
+    } else {
+      var index = $ ("#project-index").val ();
+      var node = $ (".projects-wrapper .project") [index*1];
+      $ (node).replaceWith (getProjectTmpl (projectData, index*1));
+    }
+
+    updateSettingsJSON ();
+
     return false;
   });
 
 
-  function buildSettingsJSON () {
+
+
+  function getProjectTmpl (p, index) {
+    var nodeTmpl = $ ("#project-tmpl").html ();
+    return nodeTmpl.replace ("{{name}}", p.name || "New Project " + index)
+      .replace ("{{index}}", index)
+      .replace (/{{css}}/g, p.css || "-")
+      .replace (/{{images}}/g, p.images || "-")
+      .replace (/{{js}}/g, p.js || "-")
+      .replace (/{{fonts}}/g, p.fonts || "-")
+      .replace ("{{domain-1}}", p.domains [0] || "-")
+      .replace ("{{domain-2}}", p.domains [1] || "-");
+  }
+
+
+  function updateSettingsJSON () {
     var settings = {
-      folders: {
-        css: [],
-        images: [],
-        js: [],
-        html: []
-      },
-      domains: [],
+      projects: [],
       backup: "",
       version: 1
-    }
+    };
 
-    if ($ ("#css-folder").val ()) {
-      settings.folders.css.push ({
-        path: $ ("#css-folder").val (),
-        active: true
+    $ (".projects-wrapper .project").each (function (index, node) {
+      var n = $ (node), domains = [];
+      if (n.find (".domain-1").text () !== "-") {
+        domains.push (n.find (".domain-1").text ());
+      }
+      if (n.find (".domain-2").text () !== "-") {
+        domains.push (n.find (".domain-2").text ());
+      }
+      settings.projects.push ({
+        active: true,
+        name: n.find ("h4").text (),
+        css: n.find (".css").text () !== "-" ? n.find (".css").text () : "",
+        images: n.find (".images").text () !== "-" ? n.find (".images").text () : "",
+        js: n.find (".js").text () !== "-" ? n.find (".js").text () : "",
+        fonts: n.find (".fonts").text () !== "-" ? n.find (".fonts").text () : "",
+        domains: domains
       });
-    }
-    if ($ ("#img-folder").val ()) {
-      settings.folders.images.push ({
-        path: $ ("#img-folder").val (),
-        active: true
-      });
-    }
-    if ($ ("#js-folder").val ()) {
-      settings.folders.js.push ({
-        path: $ ("#js-folder").val (),
-        active: true
-      });
-    }
-    if ($ ("#html-folder").val ()) {
-      settings.folders.html.push ({
-        path: $ ("#html-folder").val (),
-        active: true
-      });
-    }
+    });
 
-    if ($ ("#domain-0").val ()) {
-      settings.domains.push ({
-        name: $ ("#domain-0").val (),
-        active: true
-      })
-    }
-    if ($ ("#domain-1").val ()) {
-      settings.domains.push ({
-        name: $ ("#domain-1").val (),
-        active: true
-      })
-    }
+    $.post ("/settings/", {
+      settings: JSON.stringify (settings)
+    }, function () {
+      console.log ("Done Updating!");
+    });
 
-    return settings;
+
+  }
+
+  function openModal (data) {
+    var creatingNew = !data;
+    $ ("#modal-bg, #modal").removeClass ("hidden");
+
+    $ ("#project-index").val (creatingNew ? "-1" : data.id);
+    $ ("#modal-title").text (creatingNew ? "Create new project" : "Edit project");
+    $ ("#modal-submit").text (creatingNew ? "Create!" : "Edit!");
+    $ ("#project-title").val (creatingNew ? "" : data.name).focus ();
+    $ ("#css-folder").val (creatingNew ? "" : data.css);
+    $ ("#images-folder").val (creatingNew ? "" : data.images);
+    $ ("#js-folder").val (creatingNew ? "" : data.js);
+    $ ("#fonts-folder").val (creatingNew ? "" : data.fonts);
+    $ ("#domain-1-inp").val (creatingNew ? "" : data.domains [0]);
+    $ ("#domain-2-inp").val (creatingNew ? "" : data.domains [1]);
+  }
+
+  function getFormData () {
+    var domains = [];
+    if ($ ("#domain-1-inp").val ()) {
+      domains.push ($ ("#domain-1-inp").val ());
+    }
+    if ($ ("#domain-2-inp").val ()) {
+      domains.push ($ ("#domain-2-inp").val ());
+    }
+    return {
+      active : true,
+      name   : $ ("#project-title").val (),
+      css    : $ ("#css-folder").val (),
+      images : $ ("#images-folder").val (),
+      js     : $ ("#js-folder").val (),
+      fonts  : $ ("#fonts-folder").val (),
+      domains: domains
+    };
   }
 
 }) ();

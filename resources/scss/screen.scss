@@ -1,8 +1,10 @@
-$flip-text-color: #dddddd;
-$text-color     : #222222;
-$body-bg        : #dddddd;
-$header-color   : #800000;
-$grey-border    : #888888;
+$flip-text-color : #dddddd;
+$text-color      : #222222;
+$body-bg         : #dddddd;
+$header-color    : #800000;
+$grey-border     : #aaaaaa;
+$box-shadow-color: #bbbbbb;
+$project-bg      : #eeeeee;
 
 body {
     background: $body-bg;
@@ -33,35 +35,21 @@ h1 {
 h3 {
     font-weight: normal;
     font-size: 2em;
+    padding-bottom: 0.5em;
     margin-bottom: 0.5em;
+    border-bottom: 1px solid $grey-border;
 }
 
 h4 {
     font-weight: normal;
-    font-size: 1.1em;
-    border-bottom: 1px solid $grey-border;
-    padding-bottom: 4px;
-    width: 94%;
+    font-size: 1.3em;
+    text-align: center;
+    margin: 0.5em 0 0;
 }
 
 .doc {
     padding: 10px 0;
     margin-bottom: 100px;
-}
-
-.cols {
-    overflow: auto;
-    width: 100%;
-    padding: 10px 0;
-}
-.col-1 {
-    width: 49%;
-    float: left;
-}
-
-.col-2 {
-    width: 49%;
-    float: right;
 }
 
 label {
@@ -71,22 +59,173 @@ label {
 }
 
 input {
-    width: 90%;
+    width: 96%;
     height: 40px;
     font-size: 16px;
     padding: 0 10px;
 }
 
-.buttons-wrapper {
+a {
+    color: $header-color;
+    text-decoration: none;
+    &:hover {
+        color: red;
+    }
+}
 
-    .submit-container {
-        padding: 20px 10px 10px;
+.projects-wrapper {
+    .project {
+        padding: 10px;
+        background: $project-bg;
+        margin-bottom: 15px;
+        border: 1px solid $grey-border;
+        box-shadow: 1px 1px 8px $grey-border;
         overflow: auto;
-        width: 95%;
+
+        .cols {
+            overflow: auto;
+        }
+        .col-1 {
+            float: left;
+            width: 60%;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .col-2 {
+            float: right;
+            width: 40%;
+        }
+
+        .values, .domains {
+            list-style-type: none;
+            padding-left: 0;
+
+            li {
+                font-weight: bold;
+                padding-bottom: 8px;
+            }
+            .label {
+                float: left;
+                margin-right: 20px;
+                font-weight: normal;
+                text-align: right;
+            }
+        }
+        .values {
+            padding-left: 10px;
+            .label {
+                width: 110px;
+            }
+        }
+        .domains .label {
+            width: 85px;
+        }
+        .controls-wrapper {
+            width: 100%;
+            overflow: auto;
+        }
+        .controls {
+            float: right;
+            list-style-type: none;
+            margin: 0;
+            padding: 0 5px 3px 0;
+            li {
+                padding: 0 8px;
+                float: left;
+            }
+        }
+    }
+
+    .new-project-wrapper {
+        margin: 10px 0;
+        text-align: center;
+        #new-project {
+            cursor: pointer;
+            padding: 10px;
+            background: $header-color;
+            color: $flip-text-color;
+            border: 0;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 1px 1px 8px $box-shadow-color;
+        }
+    }
+}
+
+#modal-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: black;
+    opacity: 0.6;
+}
+
+#modal {
+    position: absolute;
+    background: white;
+    width: 1000px;
+    margin-left: -500px;
+    border: 1px solid;
+    left: 50%;
+    top: 150px;
+
+    .modal-content {
+        h3 {
+            margin: 0 0 5px;
+            padding: 10px 10px 10px 30px;
+            font-size: 1.6em;
+            border-bottom: 1px solid $grey-border;
+            background: $header-color;
+            color: $flip-text-color;
+        }
+
+        label {
+            font-size: 1.1em;
+        }
+
+        form {
+            padding: 0 30px 10px;
+        }
+    }
+
+    .proj-title {
+        width: 40%;
         margin: auto;
     }
-    button {
+
+    .cols {
+        overflow: auto;
+    }
+
+    .col-1 {
+        float: left;
+        width: 55%;
+    }
+    .col-2 {
+        padding-left: 20px;
+        float: left;
+        width: 42%;
+    }
+
+    .modal-close {
+        color: $flip-text-color;
         float: right;
+        margin: 15px 30px 15px 15px;
+    }
+    .buttons-wrapper .modal-close {
+        float: none;
+        color: $header-color;
+        margin: 0 15px;
+    }
+}
+
+.buttons-wrapper {
+    padding: 15px 0 5px;
+    text-align: right;
+    button {
+        cursor: pointer;
         padding: 10px;
         background: $header-color;
         color: $flip-text-color;
@@ -95,4 +234,39 @@ input {
         font-weight: bold;
         box-shadow: 2px 2px 4px $grey-border;
     }
+}
+
+.delete-wrapper {
+    position: absolute;
+    width: 250px;
+
+    .pointer {
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid $grey-border;
+        position: relative;
+        top: -10px;
+        float: right;
+        right: 10px;
+    }
+
+    .delete-content {
+        padding: 10px;
+        border: 4px solid $grey-border;
+        background: white;
+        box-shadow: 2px 2px 4px $box-shadow-color;
+    }
+    .delete-cancel {
+        margin: 0 10px;
+    }
+    #delete-accept {
+        padding: 7px 10px;
+        box-shadow: 2px 2px 4px $box-shadow-color;
+    }
+}
+
+.hidden {
+    display: none;
 }
