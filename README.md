@@ -65,7 +65,7 @@ You can contact me anytime. Here's my contact information -
 * Email: [contact at prajwalit dot com](mailto:contact@prajwalit.com "Contact [at]
   prajwalit [dot] com")
 
-## Checkout: ##
+## Checkout ##
 * [watchr](https://github.com/bevry/watchr "Watchr; better file system
   watching for Node.js")
 * [connect](https://github.com/senchalabs/connect "Connect")
