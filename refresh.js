@@ -45,6 +45,8 @@ app.use ("/watch/", function (request, response) {
     "cache-control": "no-cache",
     "connection"   : "keep-alive"
   });
+
+  // @TODO Handle multiple connections
   connection = response;
   request.on ("close", function () {
     connection = null;
@@ -89,8 +91,9 @@ app.use ("/", function(request, response) {
 // File Watcher
 function updateWatcher (updateDomains) {
 
+  var i;
   if (currentWatchers.length) {
-    for (var i=0;i<currentWatchers.length;i+=1) {
+    for (i=0; i<currentWatchers.length; i+=1) {
       currentWatchers [i].close ();
     }
     currentWatchers = [];
@@ -98,7 +101,7 @@ function updateWatcher (updateDomains) {
 
   var paths = [], projs = settings.projects;
 
-  for (var i=0; i<projs.length; i++) {
+  for (i=0; i<projs.length; i+=1) {
     var p = projs [i];
     if (p.css) {
       paths.push (p.css);
@@ -126,7 +129,7 @@ function updateWatcher (updateDomains) {
           var fileType = filePath.split (".") [1];
           var fileName = filePath.split ("/");
           fileName = fileName [fileName.length - 1];
-          console.log ("File changed: " + fileName);
+          // console.log ("File changed: " + fileName);
           var message = JSON.stringify ({
             type: fileType,
             name: fileName
@@ -143,7 +146,7 @@ function updateWatcher (updateDomains) {
   }
 
   domains = [];
-  for (var i = 0; i < settings.projects.length ; i++) {
+  for (i=0; i<settings.projects.length; i+=1) {
     domains = domains.concat (settings.projects [i].domains);
   }
 

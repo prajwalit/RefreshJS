@@ -10,7 +10,7 @@
 
   // Get latest settings
   $.getJSON ("/settings/", function (data) {
-    for (var i=0; i<data.projects.length; i++) {
+    for (var i=0; i<data.projects.length; i+=1) {
       var p = data.projects [i];
       var nodeTmpl = getProjectTmpl (p, i);
       $ (".new-project-wrapper").before (nodeTmpl);
@@ -35,7 +35,7 @@
       js     : wrapper.find (".js").text () !== "-" ? wrapper.find (".js").text () : "",
       fonts  : wrapper.find (".fonts").text () !== "-" ? wrapper.find (".fonts").text () : "",
       domains: domains
-    }
+    };
     openModal (data);
   });
 
@@ -45,7 +45,7 @@
     var top = et.position ().top;
     var left = et.position ().left;
     $ (".delete-wrapper").show ().css ({
-      top: (top + 27) + "px",
+      top : (top + 27) + "px",
       left: (left - 202) + "px"
     }).attr ("project_id", et.closest (".project").attr ("data_id"));
   });
@@ -53,7 +53,8 @@
   // Hide delete wrapper on body-click
   $ ("body").click (function (event) {
     var et = $ (event.target);
-    if ((!et.hasClass ("delete") && !et.closest (".delete-wrapper").length) || et.hasClass ("delete-cancel")) {
+    if ((!et.hasClass ("delete") && !et.closest (".delete-wrapper").length) ||
+        et.hasClass ("delete-cancel")) {
       $ (".delete-wrapper").hide ();
     }
   });
@@ -93,8 +94,8 @@
       $ (".new-project-wrapper").before (getProjectTmpl (projectData, nextIndex));
     } else {
       var index = $ ("#project-index").val ();
-      var node = $ (".projects-wrapper .project") [index*1];
-      $ (node).replaceWith (getProjectTmpl (projectData, index*1));
+      var node = $ (".projects-wrapper .project") [index * 1];
+      $ (node).replaceWith (getProjectTmpl (projectData, index * 1));
     }
 
     updateSettingsJSON ();
@@ -105,7 +106,7 @@
   // create project markup
   function getProjectTmpl (p, index) {
     var nodeTmpl = $ ("#project-tmpl").html ();
-    return nodeTmpl.replace ("{{name}}", p.name || "New Project " + index)
+    return nodeTmpl.replace ("{{name}}", p.name || ("New Project " + index))
       .replace ("{{index}}", index)
       .replace (/{{css}}/g, p.css || "-")
       .replace (/{{images}}/g, p.images || "-")
@@ -113,14 +114,14 @@
       .replace (/{{fonts}}/g, p.fonts || "-")
       .replace ("{{domain-1}}", p.domains [0] || "-")
       .replace ("{{domain-2}}", p.domains [1] || "-");
-  }
+  };
 
   // Build new settings JSON and post to server.
   function updateSettingsJSON () {
     var settings = {
       projects: [],
-      backup: "",
-      version: 1
+      backup  : "",
+      version : 1
     };
 
     $ (".projects-wrapper .project").each (function (index, node) {
@@ -132,12 +133,12 @@
         domains.push (n.find (".domain-2").text ());
       }
       settings.projects.push ({
-        active: true,
-        name: n.find ("h4").text (),
-        css: n.find (".css").text () !== "-" ? n.find (".css").text () : "",
-        images: n.find (".images").text () !== "-" ? n.find (".images").text () : "",
-        js: n.find (".js").text () !== "-" ? n.find (".js").text () : "",
-        fonts: n.find (".fonts").text () !== "-" ? n.find (".fonts").text () : "",
+        active : true,
+        name   : n.find ("h4").text (),
+        css    : n.find (".css").text () !== "-" ? n.find (".css").text () : "",
+        images : n.find (".images").text () !== "-" ? n.find (".images").text () : "",
+        js     : n.find (".js").text () !== "-" ? n.find (".js").text () : "",
+        fonts  : n.find (".fonts").text () !== "-" ? n.find (".fonts").text () : "",
         domains: domains
       });
     });

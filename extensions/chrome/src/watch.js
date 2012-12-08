@@ -8,6 +8,7 @@
  */
 
 (function () {
+
   var domains = [], refreshActive = false;
 
   chrome.extension.onMessage.addListener (function(message, sender) {
@@ -66,7 +67,7 @@
     css: function (name) {
       var all = typeof name === "boolean" && all;
       var links = document.getElementsByTagName ("link");
-      for (var i = 0; i < links.length; i++) {
+      for (var i=0; i<links.length; i+=1) {
         var link = links [i];
         if (all || link.href.indexOf (name) !== -1) {
           var newHref = link.href.split ("?") [0];
@@ -78,7 +79,7 @@
 
     image: function (name) {
       var images = document.getElementsByTagName ("img");
-      for (var i = 0; i < images.length; i++) {
+      for (var i=0; i<images.length; i+=1) {
         var image = image [i];
         if (image.src.indexOf (name) !== -1 || all) {
           var newSrc = image.src.split ("?") [0];
@@ -90,7 +91,7 @@
 
     js: function (name) {
       var scripts = document.getElementsByTagName ("script");
-      for (var i = 0; i < scripts.length; i++) {
+      for (var i=0; i<scripts.length; i+=1) {
         var js = scripts [i];
         if (js.src.indexOf (name) !== -1) {
           window.location.reload ();
