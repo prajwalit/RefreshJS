@@ -1,0 +1,138 @@
+$flip-text-color : #dddddd;
+$text-color      : #222222;
+$body-bg         : #dddddd;
+$header-color    : #800000;
+$grey-border     : #aaaaaa;
+$box-shadow-color: #bbbbbb;
+
+
+body {
+    background: $body-bg;
+    color: $text-color;
+    margin: 0;
+    font-family: sans-serif;
+    font-size: 22px;
+}
+
+header {
+    /* padding: 20px 0; */
+    /* background: $header-color; */
+}
+
+h1 {
+    margin: 70px 0 0;
+    color: $header-color;
+    font-size: 3.5em;
+    font-weight: normal;
+    text-align: center;
+}
+
+.content-wrapper {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h3 {
+    font-weight: normal;
+    font-size: 2em;
+    padding-bottom: 0.5em;
+    margin-bottom: 0.5em;
+    //border-bottom: 1px solid $grey-border;
+}
+
+h4 {
+    font-weight: normal;
+    font-size: 1.3em;
+    text-align: center;
+    margin: 0.5em 0 0;
+}
+
+.doc {
+    padding: 10px 0;
+    margin-bottom: 60px;
+}
+
+label {
+    margin-top: 10px;
+    display: block;
+    padding: 5px 0;
+}
+
+input {
+    width: 96%;
+    height: 40px;
+    font-size: 16px;
+    padding: 0 10px;
+}
+
+a {
+    color: $header-color;
+    text-decoration: none;
+    &:hover {
+        color: red;
+    }
+}
+
+footer {
+    border-top: 1px solid $grey-border;
+    text-align: center;
+}
+.links {
+    list-style-type: none;
+    margin: 5px 0 30px;
+    overflow: auto;
+    padding: 30px 0 0;
+    display: inline-block;
+    li {
+        float: left;
+        padding: 0 4px;
+    }
+}
+
+.doc {
+    text-align: center;
+    max-width: 800px;
+    margin: auto;
+}
+
+.button-wrapper {
+    margin: 40px 0;
+}
+.button {
+    background: $header-color;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    line-height: 1.2em;
+    box-shadow: 2px 2px 6px $box-shadow-color;
+    &:hover {
+        color: $flip-text-color;
+    }
+}
+
+.small {
+    font-size: 0.9em;
+}
+
+.code {
+    width: 500px;
+    border: 1px solid $grey-border;
+    margin: 30px auto;
+    padding: 10px;
+    text-align: left;
+    font-size: 0.7em;
+    background: white;
+    border-radius: 4px;
+
+    ul {
+        padding-left: 25px;
+
+        li {
+            line-height: 1.5em;
+        }
+    }
+}
+.mono {
+    font-family: monospace;
+}
