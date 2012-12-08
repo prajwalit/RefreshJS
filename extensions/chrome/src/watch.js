@@ -15,31 +15,30 @@
       switch (change.type) {
 
       case "css":
-        console.log ("CSS updated: " + change.name);
-        var links = document.getElementsByTagName ("link");
-        for (var i=0; i<links.length; i++) {
-          var link = links [i];
-          if (link.href.indexOf (change.name) !== -1) {
-            var newHref = link.href.split ("?") [0];
-            newHref += "?forceReload=" + new Date ().getTime ();
-            link.href = newHref;
-          }
-        }
+        // console.log ("CSS updated: " + change.name);
+        refresh.css (change.name);
         break;
 
       case "png":
       case "jpg":
       case "jpeg":
       case "gif":
-        console.log ("Image updated: " + change.name);
+        // console.log ("Image updated: " + change.name);
+        refresh.image (change.name);
+        refresh.css (true);
         break;
 
       case "js":
-        console.log ("JS updated: " + change.name);
+        // console.log ("JS updated: " + change.name);
+        refresh.js (change.name);
         break;
 
-      case "html":
-        console.log ("HTML updated: " + change.name);
+      case "eot":
+      case "svg":
+      case "ttf":
+      case "woff":
+        // console.log ("Font updated: " + change.name);
+        refresh.css (true);
         break;
       }
 
@@ -51,5 +50,44 @@
 
   // Ask for domains
   chrome.extension.sendRequest ("get-domains");
+
+
+  var refresh = {
+
+    css: function (name) {
+      var all = typeof name === "boolean" && all;
+      var links = document.getElementsByTagName ("link");
+      for (var i = 0; i < links.length; i++) {
+        var link = links [i];
+        if (all || link.href.indexOf (name) !== -1) {
+          var newHref = link.href.split ("?") [0];
+          newHref += "?forceReload=" + new Date ().getTime ();
+          link.href = newHref;
+        }
+      }
+    },
+
+    image: function (name) {
+      var images = document.getElementsByTagName ("img");
+      for (var i = 0; i < images.length; i++) {
+        var image = image [i];
+        if (image.src.indexOf (name) !== -1 || all) {
+          var newSrc = image.src.split ("?") [0];
+          newSrc += "?forceReload=" + new Date ().getTime ();
+          image.src = newSrc;
+        }
+      }
+    },
+
+    js: function (name) {
+      var scripts = document.getElementsByTagName ("script");
+      for (var i = 0; i < scripts.length; i++) {
+        var js = scripts [i];
+        if (js.src.indexOf (name) !== -1) {
+          window.location.reload ();
+        }
+      }
+    }
+  };
 
 }) ();
