@@ -2,7 +2,7 @@
 
 If you're a UX develper or a Front-end engineer, your workflow must be
 as follows:
-* Change css (scss) or js files in your editor.
+* Change css (sass/less) or js files in your editor.
 * Switch to your browser and open the webpage you're working on.
 * Hit refresh (or shift+refresh) and see if changes you've made are correct.
 * Go back to editor and make some more changes.
@@ -28,7 +28,6 @@ Go to your terminal and type:
 ### Start server ###
 Browse to your RefreshJS repository in your terminal and type:
 `node refresh.js`
-
 Open your chrome and in your address bar, type:
 `http://localhost:7725` and hit enter.
 
@@ -65,3 +64,8 @@ You can contact me anytime. Here's my contact information -
   Prajwalit")
 * Email: [contact at prajwalit dot com](mailto:contact@prajwalit.com "Contact [at]
   prajwalit [dot] com")
+
+## Checkout: ##
+* [watchr](https://github.com/bevry/watchr "Watchr; better file system
+  watching for Node.js")
+* [connect](https://github.com/senchalabs/connect "Connect")
