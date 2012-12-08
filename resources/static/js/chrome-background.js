@@ -1,14 +1,34 @@
 console.log ("Chrome Background");
 
-var connected = true;
+var connected = true, domains = [];
 
 window.addEventListener ("message", function (e) {
+  var msg = JSON.parse (e.data);
+
+  sendMsgToContentScripts (e.data);
+
+  if (msg.msgType === "domains-update") {
+    domains = JSON.parse (msg.data);
+  }
+}, false);
+
+function sendMsgToContentScripts (messageData) {
   chrome.tabs.query ({}, function (tab) {
     for (var i=0; i<tab.length; i+=1) {
-      chrome.tabs.sendMessage (tab [i].id, e.data);
+      chrome.tabs.sendMessage (tab [i].id, messageData);
     }
   });
-}, false);
+};
+
+chrome.extension.onRequest.addListener (function(request, sender, sendResponse) {
+  if (request === "get-domains") {
+    var message = {
+      msgType: "domains-update",
+      data: JSON.stringify (domains)
+    }
+    sendMsgToContentScripts (JSON.stringify (message));
+  }
+});
 
 var iframeReload = function () {
   var frame = document.getElementById ("bg-frame");

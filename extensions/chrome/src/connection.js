@@ -1,4 +1,5 @@
-var intr = window.setInterval (function () {
+
+function checkConnection () {
   var img = document.getElementById ("connection-test");
   if (img) {
     img.parentNode.removeChild (img);
@@ -17,7 +18,10 @@ var intr = window.setInterval (function () {
     onConnect ();
   }
   document.body.appendChild (img);
-}, 10000);
+}
+
+var intr = window.setInterval (checkConnection, 10000);
+checkConnection ();
 
 var onConnect =  function () {
   var script = document.createElement ("script");

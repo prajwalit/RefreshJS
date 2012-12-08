@@ -54,8 +54,7 @@ app.use ("/settings/", function(request, response) {
     request.on ("end", function () {
       fs.writeFile ("settings.json", qs.parse (body).settings);
       settings = JSON.parse (qs.parse (body).settings);
-      updateWatcher ();
-
+      updateWatcher (true);
     });
   }
 
@@ -68,7 +67,7 @@ app.use ("/", function(request, response) {
 
 
 // File Watcher
-function updateWatcher () {
+function updateWatcher (updateDomains) {
 
   if (currentWatchers.length) {
     for (var i=0;i<currentWatchers.length;i+=1) {
@@ -127,8 +126,11 @@ function updateWatcher () {
   for (var i = 0; i < settings.projects.length ; i++) {
     domains = domains.concat (settings.projects [i].domains);
   }
-}
 
+  if (updateDomains) {
+    sendUpdate ("domains-update", JSON.stringify (domains));
+  }
+}
 
 // Create Settings File if not already present
 if (!fs.existsSync ("settings.json")) {

@@ -1,11 +1,14 @@
 (function () {
-  var domains = [];
-  console.log ("Content-Script");
+  var domains = [], refreshActive = false;
 
   chrome.extension.onMessage.addListener (function(message, sender) {
     var msgObj = JSON.parse (message);
 
     if (msgObj.msgType === "file-update") {
+
+      if (!refreshActive) {
+        return;
+      }
 
       var change = JSON.parse (msgObj.data);
 
@@ -41,12 +44,12 @@
       }
 
     } else if (msgObj.msgType === "domains-update") {
-      console.log ("Domains Updated");
       domains = JSON.parse (msgObj.data);
-      console.log (domains);
+      refreshActive = domains.indexOf (window.location.host) !== -1;
     }
-
-
   });
+
+  // Ask for domains
+  chrome.extension.sendRequest ("get-domains");
 
 }) ();
