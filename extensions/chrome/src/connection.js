@@ -1,3 +1,12 @@
+/**
+ * Background-script for chrome extension. Script keeps checking for
+ * a small 1x1px image from node server. When it gets it, it passes
+ * the control to chrome-background.js
+ * @author Prajwalit Bhopale <contact@prajwalit.com>
+ * @created 8 Dec, 2012
+ * @module connection
+ * @requires
+ */
 
 function checkConnection () {
   var img = document.getElementById ("connection-test");

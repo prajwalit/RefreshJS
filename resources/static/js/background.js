@@ -1,4 +1,13 @@
-console.log ("Hello RefreshJS.");
+/**
+ * Listens to the server-sent events and passes those to
+ * chrome-background script. Needed to add an iframe in
+ * background page to bypass cross-site communication policy.
+ * @author Prajwalit Bhopale <contact@prajwalit.com>
+ * @created Dec 2, 2012
+ * @module background
+ * @requires
+ */
+
 var domains = [];
 var source = new EventSource ("/watch/");
 

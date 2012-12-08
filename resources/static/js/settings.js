@@ -1,5 +1,14 @@
+/**
+ * JS for settings/configurator page of RefreshJS
+ * @author Prajwalit Bhopale <prajwalit@helpshift.com>
+ * @created Dec 2, 2012
+ * @module settings
+ * @requires jQuery
+ */
+
 (function () {
 
+  // Get latest settings
   $.getJSON ("/settings/", function (data) {
     for (var i=0; i<data.projects.length; i++) {
       var p = data.projects [i];
@@ -8,6 +17,7 @@
     }
   });
 
+  // Listen for Project edits
   $ (".projects-wrapper").delegate (".edit", "click", function (event) {
     var wrapper = $ (event.currentTarget).closest (".project");
     var domains = [];
@@ -26,10 +36,10 @@
       fonts  : wrapper.find (".fonts").text () !== "-" ? wrapper.find (".fonts").text () : "",
       domains: domains
     }
-    //console.log (data);
     openModal (data);
   });
 
+  // Listen for Project deletes
   $ (".projects-wrapper").delegate (".delete", "click", function (event) {
     var et = $ (event.target);
     var top = et.position ().top;
@@ -40,6 +50,7 @@
     }).attr ("project_id", et.closest (".project").attr ("data_id"));
   });
 
+  // Hide delete wrapper on body-click
   $ ("body").click (function (event) {
     var et = $ (event.target);
     if ((!et.hasClass ("delete") && !et.closest (".delete-wrapper").length) || et.hasClass ("delete-cancel")) {
@@ -47,6 +58,7 @@
     }
   });
 
+  // Delete project handler
   $ ("#delete-accept").click (function () {
     var toDelete = $ (".delete-wrapper").hide ().attr ("project_id")*1;
     $ (".projects-wrapper .project").each (function (index, node) {
@@ -59,14 +71,17 @@
     updateSettingsJSON ();
   });
 
+  // new-project modal handler
   $ ("#new-project").click (function (event) {
     openModal ();
   });
 
+  // Close modal handler
   $ (".modal-close").click (function (event) {
     $ ("#modal-bg, #modal").addClass ("hidden");
   });
 
+  // Create / Edit project form submit handler
   $ ("#project-form").submit (function (event) {
 
     var projectData = getFormData ();
@@ -87,9 +102,7 @@
     return false;
   });
 
-
-
-
+  // create project markup
   function getProjectTmpl (p, index) {
     var nodeTmpl = $ ("#project-tmpl").html ();
     return nodeTmpl.replace ("{{name}}", p.name || "New Project " + index)
@@ -102,7 +115,7 @@
       .replace ("{{domain-2}}", p.domains [1] || "-");
   }
 
-
+  // Build new settings JSON and post to server.
   function updateSettingsJSON () {
     var settings = {
       projects: [],
@@ -134,10 +147,9 @@
     }, function () {
       console.log ("Done Updating!");
     });
-
-
   }
 
+  // On before modal open changes
   function openModal (data) {
     var creatingNew = !data;
     $ ("#modal-bg, #modal").removeClass ("hidden");
@@ -154,6 +166,7 @@
     $ ("#domain-2-inp").val (creatingNew ? "" : data.domains [1]);
   }
 
+  // Gets new / edited project's data
   function getFormData () {
     var domains = [];
     if ($ ("#domain-1-inp").val ()) {
@@ -173,6 +186,8 @@
     };
   }
 
+  // Wait till content-script triggers, remove display:none of
+  // "install chrome extension extension wrapper"
   $ (document).ready (function () {
     setTimeout (function () {
       $ (".instructions-wrapper").attr ("style", "");

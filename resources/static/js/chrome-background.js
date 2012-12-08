@@ -1,7 +1,16 @@
-console.log ("Chrome Background");
+/**
+ * Seats in chrome-extension's background page. Listens to SSE messages
+ * passed by background.js and passes those to content scripts.
+ * Keeps checking server's up status.
+ * @author Prajwalit Bhopale <contact@prajwalit.com>
+ * @created Dec 2, 2012
+ * @module chrome-background
+ * @requires
+ */
 
 var connected = true, domains = [];
 
+// Listen for SSL updates from background.js
 window.addEventListener ("message", function (e) {
   var msg = JSON.parse (e.data);
 
@@ -12,6 +21,7 @@ window.addEventListener ("message", function (e) {
   }
 }, false);
 
+// Send update messages to all content scripts
 function sendMsgToContentScripts (messageData) {
   chrome.tabs.query ({}, function (tab) {
     for (var i=0; i<tab.length; i+=1) {
@@ -20,6 +30,7 @@ function sendMsgToContentScripts (messageData) {
   });
 };
 
+// Send domain list when new content-script joins
 chrome.extension.onRequest.addListener (function(request, sender, sendResponse) {
   if (request === "get-domains") {
     var message = {
@@ -30,6 +41,7 @@ chrome.extension.onRequest.addListener (function(request, sender, sendResponse) 
   }
 });
 
+// Load/Reload iframe with local page to start listening to SSEs
 var iframeReload = function () {
   var frame = document.getElementById ("bg-frame");
   if (frame) {
@@ -40,10 +52,10 @@ var iframeReload = function () {
   frame.src = "http://localhost:7725/background/";
   document.body.appendChild (frame);
 };
-
 iframeReload ();
 
-var intr = window.setInterval (function () {
+// Keep checking server's up status
+window.setInterval (function () {
   var img = document.getElementById ("connection-test");
   if (img) {
     img.parentNode.removeChild (img);

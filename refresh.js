@@ -1,12 +1,14 @@
 /**
+ * Main RefreshJS Node server. Includes - Watchr/Router.
  * @author Prajwalit Bhopale <contact@prajwalit.com>
  * @created Dec 1, 2012
- * @module server
+ * @module refresh
  * @requires connect
  */
 
 var http = require ("http");
 var fs = require ("fs");
+// There's small a problem with watchr. So copying it for now.
 var watchr = require ("./lib/watchr");
 var app = require ("connect") ();
 var qs = require ("querystring");
@@ -77,6 +79,7 @@ app.use ("/settings/", function(request, response) {
 
 });
 
+// Configurator home
 app.use ("/", function(request, response) {
   response.setHeader ("Content-Type", "text/html");
   response.end (fs.readFileSync ("templates/index.html"));

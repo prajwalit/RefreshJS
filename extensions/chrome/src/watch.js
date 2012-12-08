@@ -1,3 +1,12 @@
+/**
+ * Watcher script. Watches our for updates from server, and refreshes
+ * the appropriate content whenever server sends the report.
+ * @author Prajwalit Bhopale <contact@prajwalit.com>
+ * @created Dec 2, 2012
+ * @module watch
+ * @requires
+ */
+
 (function () {
   var domains = [], refreshActive = false;
 
@@ -90,7 +99,7 @@
     }
   };
 
-
+  // Hide "install extension" message on configurator page.
   if (window.location.host === "localhost:7725") {
     document.documentElement.setAttribute ("class", "extension-enabled");
   }
