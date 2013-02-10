@@ -9,10 +9,10 @@
 var http = require ("http");
 var fs = require ("fs");
 // There's small a problem with watchr. So copying it for now.
-var watchr = require ("./lib/watchr");
+var chokidar = require ("chokidar");
 var app = require ("connect") ();
 var qs = require ("querystring");
-var connection, currentWatchers = [], settings, domains;
+var connection, watcher, settings, domains;
 
 
 // Routes
@@ -78,7 +78,6 @@ app.use ("/settings/", function(request, response) {
       updateWatcher (true);
     });
   }
-
 });
 
 // Configurator home
@@ -88,15 +87,25 @@ app.use ("/", function(request, response) {
 });
 
 
+function fileUpdateHandler (filePath) {
+  var fileType = filePath.split (".") [1];
+  var fileName = filePath.split ("/");
+  fileName = fileName [fileName.length - 1];
+  // console.log ("File changed: " + fileName);
+  var message = JSON.stringify ({
+    type: fileType,
+    name: fileName
+  });
+
+  sendUpdate ("file-update", message);
+};
+
 // File Watcher
 function updateWatcher (updateDomains) {
 
   var i;
-  if (currentWatchers.length) {
-    for (i=0; i<currentWatchers.length; i+=1) {
-      currentWatchers [i].close ();
-    }
-    currentWatchers = [];
+  if (watcher) {
+    watcher.close ();
   }
 
   var paths = [], projs = settings.projects;
@@ -119,30 +128,9 @@ function updateWatcher (updateDomains) {
 
   if (paths.length) {
     console.log ("Watching:\n" + paths.join (",\n"));
-    watchr.watch ({
-      ignoreHiddenFiles: true,
-      ignorePatterns: new RegExp (".+\/\.#.+"),
-      paths: paths,
-      listener: function(eventName, filePath) {
-
-        if (eventName === "change") {
-          var fileType = filePath.split (".") [1];
-          var fileName = filePath.split ("/");
-          fileName = fileName [fileName.length - 1];
-          // console.log ("File changed: " + fileName);
-          var message = JSON.stringify ({
-            type: fileType,
-            name: fileName
-          });
-
-          sendUpdate ("file-update", message);
-        }
-      },
-      next: function(err, watchers) {
-        if (err)  throw err;
-        currentWatchers = watchers;
-      }
-    });
+    watcher = chokidar.watch (paths, {ignored: /^\./, persistent: true});
+    watcher.on ("add", fileUpdateHandler);
+    watcher.on ("change", fileUpdateHandler);
   }
 
   domains = [];

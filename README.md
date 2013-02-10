@@ -22,8 +22,8 @@ Otherwise install them from here:
 [Node.JS Download](http://nodejs.org/download/ "Node.JS Download")
 
 ### Dependencies ###
-Go to your terminal and type:
-`npm install connect`
+Go to your terminal and while in RefreshJS folder type:
+`npm install chokidar connect`
 
 ### Start server ###
 Browse to your RefreshJS repository in your terminal and type:
@@ -66,6 +66,5 @@ You can contact me anytime. Here's my contact information -
   prajwalit [dot] com")
 
 ## Checkout ##
-* [watchr](https://github.com/bevry/watchr "Watchr; better file system
-  watching for Node.js")
+* [chokidar](https://github.com/paulmillr/chokidar "A neat wrapper around node.js fs.watch / fs.watchFile.")
 * [connect](https://github.com/senchalabs/connect "Connect")
